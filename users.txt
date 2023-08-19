@@ -1,0 +1,10 @@
+Super User
+    username: michal
+    email: michal@gmail.com
+    password: michal123
+
+
+User:
+    username: zbyszek
+    email: zbyszek@gmail.com
+    password: michal123
