@@ -1,10 +1,26 @@
-Super User
+SuperUser/Admin
     username: michal
     email: michal@gmail.com
     password: michal123
 
 
-User:
+Users:
     username: zbyszek
     email: zbyszek@gmail.com
+    password: michal123
+
+    username: jack
+    email: jack@gmail.com
+    password: michal123 
+
+    username: jane
+    email: jane@gmail.com
+    password: michal123
+
+    username: kate
+    email: kate@gmail.com
+    password: michal123
+
+    username: mary
+    email: mary@gmail.com
     password: michal123
