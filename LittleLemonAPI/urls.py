@@ -9,7 +9,9 @@ urlpatterns = [
     path('api/', include('djoser.urls.authtoken')),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <-- This generates the token
     path('category/', views.CategoryView.as_view()),
-    path('api/groups/manager/users', views.managers),
-    path('api/groups/manager/<int:userId>/', views.deleteManager),
+    path('api/groups/manager/users', views.managersView),
+    path('api/groups/manager/users/<int:userId>/', views.deleteManagerView),
+    path('api/groups/delivery-crew/users', views.deliveryCrewView),
+    path('api/groups/delivery-crew/users/<int:userId>', views.deleteDeliveryCrewView)
     
 ]

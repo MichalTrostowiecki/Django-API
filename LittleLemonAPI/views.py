@@ -77,7 +77,7 @@ class CategoryView(generics.ListCreateAPIView):
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAdminUser, IsAuthenticated])
-def managers(request):
+def managersView(request):
     if request.method == 'POST':
         username = request.data.get('username')
         if username:
@@ -92,20 +92,19 @@ def managers(request):
         managers = managers_group.user_set.all()
         serializer = UserSerializer(managers, many=True)
         return Response(serializer.data)
-   
+
     return Response({'message': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'DELETE'])
 @permission_classes([IsAdminUser])
-def deleteManager(request, userId):
+def deleteManagerView(request, userId):
 
     user = get_object_or_404(User, id=userId)
 
     if request.method == 'DELETE':
         managers_group = Group.objects.get(name='Manager')
         if user in managers_group.user_set.all():
-            managers_group.user_set.remove(user)
             managers_group.user_set.remove(user)
             return Response({'message': 'Manager has been deleted'}, status=status.HTTP_200_OK)
         else:
@@ -116,3 +115,38 @@ def deleteManager(request, userId):
             return Response(serializer.data)
         else:
             return Response({'message': 'Manager not found'}, status=status.HTTP_404_NOT_FOUND)
+      
+@api_view(['GET', 'POST'])
+@permission_classes([IsAdminUser])
+def deliveryCrewView(request):
+    if request.method == 'GET':
+        deliveryCrew_group = Group.objects.get(name='Delivery crew')
+        deliveryCrew = deliveryCrew_group.user_set.all()
+        serializer = UserSerializer(deliveryCrew, many=True)
+        return Response(serializer.data)
+    if request.method =='POST':
+        username = request.data.get('username')
+        if username:
+            user = get_object_or_404(User, username=username)
+            deliveryCrew = Group.objects.get(name='Delivery crew')
+            deliveryCrew.user_set.add(user)
+            return Response({'message': 'user added to delivery crew group'}, status=status.HTTP_201_CREATED)
+
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([IsAdminUser])
+def deleteDeliveryCrewView(request, userId):
+
+    user = get_object_or_404(User, id=userId)
+
+    if request.method == 'DELETE':
+        deliveryCrew_groups = Group.objects.get(name='Delivery crew')
+        if user in deliveryCrew_groups.user_set.all():
+            deliveryCrew_groups.user_set.remove(user)
+            return Response({'message': 'user removed from the delivery crew'}, status=status.HTTP_200_OK)
+    elif request.method == 'GET':
+        if user.groups.filter(name='Delivery crew').exists():
+            serializer = UserSerializer(user)
+            return Response(serializer.data)
+        else:
+            return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
