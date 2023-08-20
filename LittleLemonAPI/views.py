@@ -10,16 +10,21 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAdminUser
 from django.contrib.auth.models import Group, User
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator, EmptyPage
+from django_filters.filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class MenuItemView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
+    ordering_fields = ['price']
+    search_fields = ['title']
 
     def get(self, request):
-        item = MenuItem.objects.all()
-        serializer = MenuItemSerializer(item, many=True)
+        items = self.filter_queryset(self.get_queryset())
+        serializer = MenuItemSerializer(items, many=True)
         return Response(serializer.data, 200)
 
     def post(self, request, *args, **kwargs):
